@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Git and Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git
+          sudo apt-get install -y docker.io
+
       - name: SSH into EC2 and deploy
         uses: appleboy/ssh-action@master
         with:

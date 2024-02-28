@@ -12,26 +12,21 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
-    - name: Install Docker Compose
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose
 
-    - name: Build and push Docker images
+    - name: Install SSH key
       run: |
-        docker-compose build
-        docker-compose push
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
     - name: SSH into EC2 and deploy
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_PRIVATE_KEY }}
+        key: ~/.ssh/id_rsa
         script: |
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-          git clone https://github.com/mathzeggio/CompaniesMS.git /COMPANIESMS
+          git clone https://github.com/mathzeggio/CompaniesMS.git
           cd /COMPANIESMS
           docker-compose pull
           docker-compose up -d

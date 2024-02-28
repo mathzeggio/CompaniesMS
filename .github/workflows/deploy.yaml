@@ -10,23 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Install SSH key
-      run: |
-        echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-
-    - name: SSH into EC2 and deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ~/.ssh/id_rsa
-        script: |
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-          git clone https://github.com/mathzeggio/CompaniesMS.git
-          cd /COMPANIESMS
-          docker-compose pull
-          docker-compose up -d
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      - name: Create SSH directory
+        run: mkdir -p ~/.ssh
+  
+      - name: Install SSH key
+        run: |
+          echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+  
+      - name: SSH into EC2 and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ~/.ssh/id_rsa
+          script: |
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+            git clone https://github.com/mathzeggio/CompaniesMS.git
+            cd /COMPANIESMS
+            docker-compose pull
+            docker-compose up -d

@@ -26,6 +26,12 @@ public class Task {
     @NotNull
     private Status status;
 
+    public Task(UUID randomUUID, String description, Status status) {
+        this.id = randomUUID;
+        this.description = description;
+        this.status = status;
+    }
+
     public UUID getId(){
         return id;
     }

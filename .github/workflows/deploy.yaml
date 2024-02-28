@@ -15,10 +15,11 @@ jobs:
 
       - name: Install Git and Docker
         run: |
+          sudo apt-get remove containerd.io
+          sudo apt-get remove -y containerd
           sudo apt-get clean
           sudo apt-get update -y
           sudo apt-get install -y git
-          sudo apt-get remove -y containerd
           sudo apt-get install -y docker.io
 
       - name: SSH into EC2 and deploy

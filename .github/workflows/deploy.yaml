@@ -33,7 +33,6 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
             git clone https://github.com/mathzeggio/CompaniesMS.git
             cd /CompaniesMS
             docker-compose pull
